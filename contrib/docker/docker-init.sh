@@ -18,7 +18,7 @@
 set -ex
 
 # Create an admin user (you will be prompted to set username, first and last name before setting a password)
-fabmanager create-admin --app superset
+fabmanager create-admin --app superset --username admin --firstname Nick --lastname Floersch --email nick@stone-env.net --password abcd1234
 
 # Initialize the database
 superset db upgrade
