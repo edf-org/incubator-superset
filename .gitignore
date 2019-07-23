@@ -76,3 +76,5 @@ celerybeat.pid
 geckodriver.log
 ghostdriver.log
 testCSV.csv
+
+srvkey.json
