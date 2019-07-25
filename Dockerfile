@@ -18,9 +18,20 @@ FROM python:3.6
 
 RUN useradd --user-group --create-home --no-log-init --shell /bin/bash superset
 
+ARG SUPERSET_VERSION=0.32.0rc2
+
 # Configure environment
-ENV LANG=C.UTF-8 \
-    LC_ALL=C.UTF-8
+ENV GUNICORN_BIND=0.0.0.0:8088 \
+    GUNICORN_LIMIT_REQUEST_FIELD_SIZE=0 \
+    GUNICORN_LIMIT_REQUEST_LINE=0 \
+    GUNICORN_TIMEOUT=60 \
+    GUNICORN_WORKERS=2 \
+	LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    PYTHONPATH=/etc/superset:/home/superset:$PYTHONPATH \
+    SUPERSET_REPO=apache/incubator-superset \
+    SUPERSET_VERSION=${SUPERSET_VERSION} \
+    SUPERSET_HOME=/home/superset/superset
 
 RUN apt-get update -y
 
@@ -65,7 +76,7 @@ RUN cd superset/assets \
 
 COPY contrib/docker/docker-init.sh .
 
-RUN ./docker-init.sh
+# RUN ./docker-init.sh
 
 COPY contrib/docker/docker-entrypoint.sh /entrypoint.sh
 
