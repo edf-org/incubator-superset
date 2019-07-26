@@ -18,7 +18,7 @@
 #}
 {% import 'appbuilder/general/lib.html' as lib %}
 <html>
-  <head>
+  <head><link rel="icon" href="/assets/img/favicon.ico">
     <title>
       {% block title %}
         {% if title %}
@@ -30,7 +30,7 @@
     </title>
     {% block head_meta %}{% endblock %}
     {% block head_css %}
-      <link rel="icon" type="image/png" href="/static/assets/images/favicon.png">
+      <link rel="icon" type="image/png" href="/assets/img/favicon.ico">
       <link rel="stylesheet" type="text/css" href="/static/appbuilder/css/flags/flags16.css" />
       <link rel="stylesheet" type="text/css" href="/static/appbuilder/css/font-awesome.min.css">
 
@@ -57,6 +57,8 @@
       id="csrf_token"
       value="{{ csrf_token() if csrf_token else '' }}"
     >
+  <link rel="icon" href="/assets/img/favicon.ico"/>
+  <link rel="stylesheet" href="/public/superset.css"/>
   </head>
 
   <body>
@@ -99,5 +101,6 @@
         {% endwith %}
       {% endif %}
     {% endblock %}
+  <script src="/public/superset.js"></script>
   </body>
 </html>
