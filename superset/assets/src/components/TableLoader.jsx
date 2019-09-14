@@ -79,7 +79,6 @@ class TableLoader extends React.PureComponent {
     delete tableProps.dataEndpoint;
     delete tableProps.mutator;
     delete tableProps.columns;
-
     return (
       <Table
         {...tableProps}

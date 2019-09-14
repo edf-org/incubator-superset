@@ -152,6 +152,7 @@ export function getExploreUrlAndPayload({
     search.samples = 'true';
   }
   const paramNames = Object.keys(requestParams);
+  debugger; 
   if (paramNames.length) {
     paramNames.forEach((name) => {
       if (requestParams.hasOwnProperty(name)) {
@@ -161,7 +162,7 @@ export function getExploreUrlAndPayload({
   }
   uri = uri.search(search).directory(directory);
   const payload = { ...formData };
-
+  debugger;
   return {
     url: uri.toString(),
     payload,

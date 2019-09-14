@@ -270,13 +270,13 @@ class Slice(Model, AuditMixinNullable, ImportMixin):
         except Exception as e:
             logging.error("Malformed json in slice's params")
             logging.exception(e)
-        form_data.update(
-            {
-                "slice_id": self.id,
-                "viz_type": self.viz_type,
-                "datasource": "{}__{}".format(self.datasource_id, self.datasource_type),
-            }
-        )
+        form_data.update({
+            'slice_id': self.id,
+            'viz_type': self.viz_type,
+            'datasource': '{}__{}'.format(
+                self.datasource_id, self.datasource_type),
+            'description': self.description
+        })
 
         if self.cache_timeout:
             form_data["cache_timeout"] = self.cache_timeout

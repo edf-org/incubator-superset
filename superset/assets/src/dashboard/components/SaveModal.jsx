@@ -27,6 +27,7 @@ import ModalTrigger from '../../components/ModalTrigger';
 import Checkbox from '../../components/Checkbox';
 import { SAVE_TYPE_OVERWRITE, SAVE_TYPE_NEWDASHBOARD } from '../util/constants';
 import { safeStringify } from '../../utils/safeStringify';
+import Screenshot from '../../utils/screenshot'
 
 const propTypes = {
   addSuccessToast: PropTypes.func.isRequired,
@@ -111,7 +112,7 @@ class SaveModal extends React.PureComponent {
       colorNamespace,
     );
     const labelColors = colorScheme ? scale.getColorMap() : {};
-    const data = {
+    let data = {
       positions,
       css,
       color_namespace: colorNamespace,
@@ -130,7 +131,15 @@ class SaveModal extends React.PureComponent {
         t('You must pick a name for the new dashboard'),
       );
     } else {
-      this.onSave(data, dashboardId, saveType).then(resp => {
+      const screenshot = Screenshot({lookupClass: "dashboard-grid", isId: false, lookupIndex: 0 })
+      screenshot
+      .then( screenshotCapture => {
+        data['description'] = screenshotCapture
+        debugger;
+      })
+      .then( res => this.onSave(data, dashboardId, saveType))
+      .then(resp => {
+        debugger;
         if (
           saveType === SAVE_TYPE_NEWDASHBOARD &&
           resp &&

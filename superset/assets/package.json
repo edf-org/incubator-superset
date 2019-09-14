@@ -95,6 +95,7 @@
     "dnd-core": "^2.6.0",
     "dompurify": "^1.0.3",
     "geolib": "^2.0.24",
+    "html2canvas": "^1.0.0-rc.3",
     "immutable": "^3.8.2",
     "jquery": "3.1.1",
     "json-bigint": "^0.3.0",

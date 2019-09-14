@@ -21,7 +21,6 @@ import logging
 import re
 from typing import Dict, List  # noqa: F401
 from urllib import parse
-
 from flask import (
     abort,
     flash,
@@ -304,8 +303,9 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
         "datasource_name",
         "owners",
     )
-    list_columns = ["slice_link", "viz_type", "datasource_link", "creator", "modified"]
-    order_columns = ["viz_type", "datasource_link", "modified"]
+    list_columns = [
+        'slice_link', 'viz_type', 'datasource_link', 'creator', 'modified', 'description']
+    order_columns = ['viz_type', 'datasource_link', 'modified']
     edit_columns = [
         "slice_name",
         "description",
@@ -444,16 +444,10 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
     list_columns = ["dashboard_link", "creator", "published", "modified"]
     order_columns = ["modified", "published"]
     edit_columns = [
-        "dashboard_title",
-        "slug",
-        "owners",
-        "position_json",
-        "css",
-        "json_metadata",
-        "published",
-    ]
-    show_columns = edit_columns + ["table_names", "charts"]
-    search_columns = ("dashboard_title", "slug", "owners", "published")
+        'dashboard_title', 'slug', 'owners', 'position_json', 'css',
+        'json_metadata', 'description']
+    show_columns = edit_columns + ['table_names', 'slices']
+    search_columns = ('dashboard_title', 'slug', 'owners')
     add_columns = edit_columns
     base_order = ("changed_on", "desc")
     description_columns = {
@@ -1335,7 +1329,8 @@ class Superset(BaseSupersetView):
 
         slc.params = json.dumps(form_data, indent=2, sort_keys=True)
         slc.datasource_name = datasource_name
-        slc.viz_type = form_data["viz_type"]
+        slc.viz_type = form_data['viz_type']
+        slc.description = json.loads(slc.params)['description']
         slc.datasource_type = datasource_type
         slc.datasource_id = datasource_id
         slc.slice_name = slice_name
@@ -1656,28 +1651,22 @@ class Superset(BaseSupersetView):
             positions, indent=None, separators=(",", ":"), sort_keys=True
         )
         md = dashboard.params_dict
-        dashboard.css = data.get("css")
-        dashboard.dashboard_title = data["dashboard_title"]
+        dashboard.css = data.get('css')
+        dashboard.description = data['description']
+        dashboard.dashboard_title = data['dashboard_title']
 
-        if "filter_immune_slices" not in md:
-            md["filter_immune_slices"] = []
-        if "timed_refresh_immune_slices" not in md:
-            md["timed_refresh_immune_slices"] = []
-        if "filter_immune_slice_fields" not in md:
-            md["filter_immune_slice_fields"] = {}
-        md["expanded_slices"] = data["expanded_slices"]
-        md["refresh_frequency"] = data.get("refresh_frequency", 0)
-        default_filters_data = json.loads(data.get("default_filters", "{}"))
-        applicable_filters = {
-            key: v for key, v in default_filters_data.items() if int(key) in slice_ids
-        }
-        md["default_filters"] = json.dumps(applicable_filters)
-        if data.get("color_namespace"):
-            md["color_namespace"] = data.get("color_namespace")
-        if data.get("color_scheme"):
-            md["color_scheme"] = data.get("color_scheme")
-        if data.get("label_colors"):
-            md["label_colors"] = data.get("label_colors")
+        if 'filter_immune_slices' not in md:
+            md['filter_immune_slices'] = []
+        if 'timed_refresh_immune_slices' not in md:
+            md['timed_refresh_immune_slices'] = []
+        if 'filter_immune_slice_fields' not in md:
+            md['filter_immune_slice_fields'] = {}
+        md['expanded_slices'] = data['expanded_slices']
+        default_filters_data = json.loads(data.get('default_filters', '{}'))
+        applicable_filters = \
+            {key: v for key, v in default_filters_data.items()
+             if int(key) in slice_ids}
+        md['default_filters'] = json.dumps(applicable_filters)
         dashboard.json_metadata = json.dumps(md)
 
     @api
@@ -1925,17 +1914,16 @@ class Superset(BaseSupersetView):
             .filter(or_(Slice.created_by_fk == user_id, Slice.changed_by_fk == user_id))
             .order_by(Slice.changed_on.desc())
         )
-        payload = [
-            {
-                "id": o.id,
-                "title": o.slice_name,
-                "url": o.slice_url,
-                "dttm": o.changed_on,
-                "viz_type": o.viz_type,
-            }
-            for o in qry.all()
-        ]
-        return json_success(json.dumps(payload, default=utils.json_int_dttm_ser))
+        payload = [{
+            'id': o.id,
+            'title': o.slice_name,
+            'url': o.slice_url,
+            'created_dttm': o.created_on.strftime("Created %m/%d/%y"),
+            'viz_type': o.viz_type,
+            'description': o.description
+        } for o in qry.all()]
+        return json_success(
+            json.dumps(payload, default=utils.json_int_dttm_ser))
 
     @api
     @has_access_api
