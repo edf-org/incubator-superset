@@ -333,6 +333,13 @@ if config.get("ENABLE_ACCESS_REQUEST"):
     )
 
 
+from flask_appbuilder.models.sqla.filters import FilterInFunction
+def aqdc_or_own():
+    return [
+        g.user.id,
+        -1
+    ]
+
 class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
     formatters_columns = {"creator": lambda c: 'AQDC System' if 'AQDC System' in c else "Public User"}
 
@@ -382,7 +389,10 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
             "Note this defaults to the datasource/table timeout if undefined."
         ),
     }
-    base_filters = [["id", SliceFilter, lambda: []]]
+    base_filters = [
+        ["id", SliceFilter, lambda: []],
+        ["creator.id", FilterInFunction, aqdc_or_own],
+    ]
     label_columns = {
         "cache_timeout": _("Cache Timeout"),
         "creator": _("Creator"),
