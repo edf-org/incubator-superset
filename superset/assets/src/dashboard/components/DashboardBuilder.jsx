@@ -119,6 +119,7 @@ class DashboardBuilder extends React.Component {
   getChildContext() {
     return {
       dragDropManager: this.context.dragDropManager || getDragDropManager(),
+      onChangeTab: this.handleChangeTab,
     };
   }
 
@@ -214,7 +215,6 @@ class DashboardBuilder extends React.Component {
                         index={0}
                         renderTabContent={false}
                         renderHoverMenu={false}
-                        onChangeTab={this.handleChangeTab}
                       />
                     </WithPopoverMenu>
                   )}
@@ -285,6 +285,7 @@ DashboardBuilder.propTypes = propTypes;
 DashboardBuilder.defaultProps = defaultProps;
 DashboardBuilder.childContextTypes = {
   dragDropManager: PropTypes.object.isRequired,
+  onChangeTab: PropTypes.func.isRequired,
 };
 
 export default DashboardBuilder;

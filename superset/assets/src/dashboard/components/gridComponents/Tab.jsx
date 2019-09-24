@@ -177,7 +177,6 @@ export default class Tab extends React.PureComponent {
             onResize={onResize}
             onResizeStop={onResizeStop}
             isComponentVisible={isComponentVisible}
-            onChangeTab={this.handleChangeTab}
           />
         ))}
         {/* Make bottom of tab droppable */}

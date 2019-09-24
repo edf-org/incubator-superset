@@ -60,7 +60,6 @@ const propTypes = {
   // dnd
   createComponent: PropTypes.func.isRequired,
   handleComponentDrop: PropTypes.func.isRequired,
-  onChangeTab: PropTypes.func.isRequired,
   deleteComponent: PropTypes.func.isRequired,
   updateComponents: PropTypes.func.isRequired,
 };
@@ -156,7 +155,7 @@ class Tabs extends React.PureComponent {
       });
 
       const pathToTabIndex = getDirectPathToTabIndex(component, tabIndex);
-      this.props.onChangeTab({ pathToTabIndex });
+      this.context.onChangeTab({ pathToTabIndex });
     }
   }
 
@@ -303,5 +302,8 @@ class Tabs extends React.PureComponent {
 
 Tabs.propTypes = propTypes;
 Tabs.defaultProps = defaultProps;
+Tabs.contextTypes = {
+  onChangeTab: PropTypes.func.isRequired,
+};
 
 export default Tabs;

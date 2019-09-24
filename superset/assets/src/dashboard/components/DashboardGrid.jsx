@@ -166,7 +166,6 @@ class DashboardGrid extends React.PureComponent {
               onResizeStart={this.handleResizeStart}
               onResize={this.handleResize}
               onResizeStop={this.handleResizeStop}
-              onChangeTab={this.handleChangeTab}
             />
           ))}
 
