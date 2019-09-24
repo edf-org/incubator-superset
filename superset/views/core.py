@@ -334,6 +334,8 @@ if config.get("ENABLE_ACCESS_REQUEST"):
 
 
 class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
+    formatters_columns = {"creator": lambda c: 'AQDC System' if 'AQDC System' in c else "Public User"}
+
     route_base = "/chart"
     datamodel = SQLAInterface(models.Slice)
 
@@ -479,6 +481,8 @@ appbuilder.add_view_no_menu(SliceAddView)
 
 
 class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
+    formatters_columns = {"creator": lambda c: 'AQDC System' if 'AQDC System' in c else "Public User"}
+
     route_base = "/dashboard"
     datamodel = SQLAInterface(models.Dashboard)
 
