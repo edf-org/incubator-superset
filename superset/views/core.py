@@ -230,14 +230,20 @@ def _deserialize_results_payload(
         ):
             return json.loads(payload)  # noqa
 
-
 class SliceFilter(SupersetFilter):
     def apply(self, query, func):  # noqa
+        User = ab_models.User
         if security_manager.all_datasource_access():
             return query
         perms = self.get_view_menus("datasource_access")
+
+        user_ids = [User.get_user_id(), -1] if User.get_user_id() != None  else [-1]
+
         # TODO(bogdan): add `schema_access` support here
-        return query.filter(self.model.perm.in_(perms))
+        return query.filter(and_(
+            self.model.perm.in_(perms),
+            self.model.owners.any(User.id.in_(user_ids))
+        ))
 
 
 class DashboardFilter(SupersetFilter):
@@ -333,13 +339,6 @@ if config.get("ENABLE_ACCESS_REQUEST"):
     )
 
 
-from flask_appbuilder.models.sqla.filters import FilterInFunction
-def aqdc_or_own():
-    return [
-        g.user.id,
-        -1
-    ]
-
 class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
     formatters_columns = {"creator": lambda c: 'AQDC System' if 'AQDC System' in c else "Public User"}
 
@@ -389,10 +388,7 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
             "Note this defaults to the datasource/table timeout if undefined."
         ),
     }
-    base_filters = [
-        ["id", SliceFilter, lambda: []],
-        ["creator.id", FilterInFunction, aqdc_or_own],
-    ]
+    base_filters = [["id", SliceFilter, lambda: []]]
     label_columns = {
         "cache_timeout": _("Cache Timeout"),
         "creator": _("Creator"),
