@@ -364,7 +364,7 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
         "slice_name",
         "description",
         "viz_type",
-        #"owners",
+        "owners",
         "dashboards",
         "params",
         "cache_timeout",
@@ -396,7 +396,7 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
         "datasource_link": _("Datasource"),
         "description": _("Description"),
         "modified": _("Last Modified"),
-        #"owners": _("Owners"),
+        "owners": _("Owners"),
         "params": _("Parameters"),
         "slice_link": _("Chart"),
         "slice_name": _("Name"),
@@ -476,7 +476,7 @@ class SliceAddView(SliceModelView):  # noqa
         "datasource_type",
         "datasource_name_text",
         "datasource_link",
-        #"owners",
+        "owners",
         "modified",
         "changed_on",
         "changed_on_humanized",
@@ -502,7 +502,7 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
     edit_columns = [
         "dashboard_title",
         "slug",
-        #"owners",
+        "owners",
         "position_json",
         "css",
         "json_metadata",
@@ -510,7 +510,7 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
     ]
     show_columns = edit_columns + ["table_names", "charts"]
     search_columns = (
-        "dashboard_title",
+        "dashboard_title", 
         "slug",
         #"owners",
         "published"
@@ -536,7 +536,7 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
             "is exposed here for reference and for power users who may "
             "want to alter specific parameters."
         ),
-        #"owners": _("Owners is a list of users who can alter the dashboard."),
+        "owners": _("Owners is a list of users who can alter the dashboard."),
         "published": _(
             "Determines whether or not this dashboard is "
             "visible in the list of all dashboards"
@@ -548,7 +548,7 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
         "dashboard_title": _("Title"),
         "slug": _("Slug"),
         "charts": _("Charts"),
-        #"owners": _("Owners"),
+        "owners": _("Owners"),
         "creator": _("Creator"),
         "modified": _("Modified"),
         "position_json": _("Position JSON"),

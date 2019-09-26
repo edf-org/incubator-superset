@@ -24,7 +24,7 @@ import classnames from 'classnames';
 import Button from '../../components/Button';
 
 const propTypes = {
-  canAdd: PropTypes.string.isRequired,
+  canAdd: PropTypes.bool.isRequired,
   onQuery: PropTypes.func.isRequired,
   onSave: PropTypes.func,
   onStop: PropTypes.func,
@@ -42,7 +42,7 @@ const defaultProps = {
 export default function QueryAndSaveBtns(
   { canAdd, onQuery, onSave, onStop, loading, chartIsStale, errorMessage }) {
   const saveClasses = classnames({
-    'disabled disabledButton': canAdd !== 'True',
+    'disabled disabledButton': !canAdd,
   });
 
   let qryButtonStyle = 'default';
