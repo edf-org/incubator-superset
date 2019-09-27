@@ -364,7 +364,7 @@ class SliceModelView(SupersetModelView, DeleteMixin):  # noqa
         "slice_name",
         "description",
         "viz_type",
-        "owners",
+        #"owners",
         "dashboards",
         "params",
         "cache_timeout",
@@ -502,7 +502,7 @@ class DashboardModelView(SupersetModelView, DeleteMixin):  # noqa
     edit_columns = [
         "dashboard_title",
         "slug",
-        "owners",
+        #"owners",
         "position_json",
         "css",
         "json_metadata",
