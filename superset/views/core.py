@@ -612,6 +612,7 @@ appbuilder.add_view(
 
 
 class DashboardModelViewAsync(DashboardModelView):  # noqa
+    formatters_columns = {"creator": lambda c: 'AQDC System' if 'AQDC System' in c else "Public User"}
     route_base = "/dashboardasync"
     list_columns = [
         "id",
@@ -1880,8 +1881,14 @@ class Superset(BaseSupersetView):
             }
             if o.Dashboard.created_by:
                 user = o.Dashboard.created_by
-                d["creator"] = str(user)
-                d["creator_url"] = "/superset/profile/{}/".format(user.username)
+
+                if user.username == 'AQDC System':
+                    d["creator"] = 'AQDC System'
+                else:
+                    d["creator"] = 'Public User'
+
+                #d["creator"] = str(user)
+                #d["creator_url"] = "/superset/profile/{}/".format(user.username)
             payload.append(d)
         return json_success(json.dumps(payload, default=utils.json_int_dttm_ser))
 
@@ -2007,8 +2014,14 @@ class Superset(BaseSupersetView):
             }
             if o.Slice.created_by:
                 user = o.Slice.created_by
-                d["creator"] = str(user)
-                d["creator_url"] = "/superset/profile/{}/".format(user.username)
+
+                if user.username == 'AQDC System':
+                    d["creator"] = 'AQDC System'
+                else:
+                    d["creator"] = 'Public User'
+
+                #d["creator"] = str(user)
+                #d["creator_url"] = "/superset/profile/{}/".format(user.username)
             payload.append(d)
         return json_success(json.dumps(payload, default=utils.json_int_dttm_ser))
 

@@ -16,20 +16,20 @@
 # under the License.
 # pylint: disable=C,R,W
 """a collection of model-related helper classes and functions"""
-from datetime import datetime
 import json
 import logging
 import re
+from datetime import datetime
 
-from flask import escape, g, Markup
-from flask_appbuilder.models.decorators import renders
-from flask_appbuilder.models.mixins import AuditMixin
 import humanize
 import sqlalchemy as sa
-from sqlalchemy import and_, or_, UniqueConstraint
+import yaml
+from flask import Markup, escape, g
+from flask_appbuilder.models.decorators import renders
+from flask_appbuilder.models.mixins import AuditMixin
+from sqlalchemy import UniqueConstraint, and_, or_
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm.exc import MultipleResultsFound
-import yaml
 
 from superset.utils.core import QueryStatus
 
@@ -321,8 +321,14 @@ class AuditMixinNullable(AuditMixin):
     def _user_link(self, user):
         if not user:
             return ""
-        url = "/superset/profile/{}/".format(user.username)
-        return Markup('<a href="{}">{}</a>'.format(url, escape(user) or ""))
+
+        if user.username == 'AQDC System':
+            return 'AQDC System'
+        else:
+            return 'Public User'
+
+        # url = "/superset/profile/{}/".format(user.username)
+        # return Markup('<a href="{}">{}</a>'.format(url, escape(user) or ""))
 
     def changed_by_name(self):
         if self.created_by:
