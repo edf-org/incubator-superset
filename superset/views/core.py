@@ -2956,6 +2956,9 @@ class Superset(BaseSupersetView):
         sql_queries = query.order_by(Query.start_time.asc()).limit(query_limit).all()
 
         dict_queries = [q.to_dict() for q in sql_queries]
+        for q in dict_queries:
+            del q['user']
+            del q['userId']
 
         return Response(
             json.dumps(dict_queries, default=utils.json_int_dttm_ser),
